@@ -1,0 +1,50 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: ${{ true }}
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v1
+
+    - name: Login to Heroku Container registry
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:login
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t mlflowaws . \
+          --build-arg DB_USER_ID=$DB_USER_ID \
+          --build-arg DB_USER_KEY=$DB_USER_KEY \
+          --build-arg DB_ENDPOINT=$DB_ENDPOINT \
+          --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+          --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+          --build-arg S3_BUCKET=$S3_BUCKET \
+          --build-arg DB_PORT=$DB_PORT \
+          --build-arg DB_NAME=$DB_NAME
+        docker tag mlflowaws registry.heroku.com/$APP_NAME/web
+        docker push registry.heroku.com/$APP_NAME/web
+      env:
+        DB_USER_ID: ${{ secrets.DB_USER_ID }}
+        DB_USER_KEY: ${{ secrets.DB_USER_KEY }}
+        DB_ENDPOINT: ${{ secrets.DB_ENDPOINT }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        APP_NAME: ${{ secrets.APP_NAME }}
+        S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+
+    - name: Release
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        APP_NAME: ${{ secrets.APP_NAME }}
+      run: heroku container:release -a $APP_NAME web
