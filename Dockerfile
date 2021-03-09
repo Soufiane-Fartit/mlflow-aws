@@ -19,8 +19,8 @@ ARG DB_ENDPOINT
 ARG S3_BUCKET
 ARG DB_PORT
 ARG DB_NAME
-ARG MLFLOW_TRACKING_USERNAME=soufiane
-ARG MLFLOW_TRACKING_PASSWORD=123
+ARG MLFLOW_TRACKING_USERNAME
+ARG MLFLOW_TRACKING_PASSWORD
 
 ENV AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY}
@@ -57,9 +57,9 @@ RUN addgroup -gid 1000 www \
 COPY nginx.conf.template ${MLFLOW_HOME}/scripts/nginx.conf.template
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY scripts/auth/entry-point.sh ${MLFLOW_HOME}/scripts/entry-point.sh
-COPY scripts/auth/webserver.sh ${MLFLOW_HOME}/scripts/webserver.sh
-COPY scripts/auth/mlflow.sh ${MLFLOW_HOME}/scripts/mlflow.sh
+COPY scripts/entry-point.sh ${MLFLOW_HOME}/scripts/entry-point.sh
+COPY scripts/webserver.sh ${MLFLOW_HOME}/scripts/webserver.sh
+COPY scripts/mlflow.sh ${MLFLOW_HOME}/scripts/mlflow.sh
 
 RUN chmod a+x ${MLFLOW_HOME}/scripts/entry-point.sh
 RUN chmod a+x ${MLFLOW_HOME}/scripts/webserver.sh
@@ -67,5 +67,3 @@ RUN chmod a+x ${MLFLOW_HOME}/scripts/mlflow.sh
 
 CMD ["/bin/bash", "./scripts/entry-point.sh"]
 
-# LAUNCH
-#ENTRYPOINT ["./scripts/run.sh"]

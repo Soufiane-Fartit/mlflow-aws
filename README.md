@@ -42,4 +42,7 @@ Hosted on Heroku, and using AWS RDS (MySQL) as a backend store, and AWS S3 as ar
 
             Heroku unique name of the APP
 
+* **MLFLOW_TRACKING_PASSWORD**
+* **MLFLOW_TRACKING_USERNAME**
 
+            To connect to the web application

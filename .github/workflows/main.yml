@@ -29,7 +29,9 @@ jobs:
           --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
           --build-arg S3_BUCKET=$S3_BUCKET \
           --build-arg DB_PORT=$DB_PORT \
-          --build-arg DB_NAME=$DB_NAME
+          --build-arg DB_NAME=$DB_NAME \
+          --build-arg MLFLOW_TRACKING_USERNAME=$MLFLOW_TRACKING_USERNAME \
+          --build-arg MLFLOW_TRACKING_PASSWORD=$MLFLOW_TRACKING_PASSWORD
         docker tag mlflowaws registry.heroku.com/$APP_NAME/web
         docker push registry.heroku.com/$APP_NAME/web
       env:
@@ -42,6 +44,8 @@ jobs:
         S3_BUCKET: ${{ secrets.S3_BUCKET }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_NAME: ${{ secrets.DB_NAME }}
+        MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
+        MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
 
     - name: Release
       env:
