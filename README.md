@@ -46,3 +46,56 @@ Hosted on Heroku, and using AWS RDS (MySQL) as a backend store, and AWS S3 as ar
 * **MLFLOW_TRACKING_USERNAME**
 
             To connect to the web application
+
+
+## Usage
+
+In the python script :
+
+set env variables for creds (the same used in secrets)
+
+```
+import os
+os.environ['MLFLOW_TRACKING_USERNAME'] = 'username'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = 'secret'
+```
+
+Set the endpoint 
+```
+mlflow.set_tracking_uri("https://<APP_NAME>.herokuapp.com")
+```
+
+Set the experiment name
+```
+mlflow.set_experiment("wine-quality")
+```
+
+Retrieve the experiment by its name from the backend store
+```
+experiment = mlflow.get_experiment_by_name("wine-quality")
+```
+
+Run the experiment
+```
+with mlflow.start_run(experiment_id=experiment.experiment_id):
+        lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
+        lr.fit(train_x, train_y)
+
+        predicted_qualities = lr.predict(test_x)
+        (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)
+
+        mlflow.log_param("alpha", alpha)
+        mlflow.log_param("l1_ratio", l1_ratio)
+        mlflow.log_metric("rmse", rmse)
+        mlflow.log_metric("r2", r2)
+        mlflow.log_metric("mae", mae)
+        
+        mlflow.sklearn.log_model(lr, "model")
+```
+
+
+---
+
+Credits :
+
+* https://github.com/soundsensing/mlflow-easyauth
