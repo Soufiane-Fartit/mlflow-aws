@@ -45,10 +45,6 @@ RUN pip install mlflow==${MLFLOW_VERSION} && \
     mkdir -p ${ARTIFACT_STORE}
 
 RUN chmod -R 0777 ${MLFLOW_HOME}
-
-COPY scripts/run.sh ${MLFLOW_HOME}/scripts/run.sh
-RUN chmod a+x ${MLFLOW_HOME}/scripts/run.sh
-
 WORKDIR ${MLFLOW_HOME}
 
 RUN addgroup -gid 1000 www \
