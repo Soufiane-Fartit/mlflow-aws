@@ -56,9 +56,14 @@ RUN addgroup -gid 1000 www \
 
 COPY nginx.conf.template ${MLFLOW_HOME}/scripts/nginx.conf.template
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 COPY scripts/auth/entry-point.sh ${MLFLOW_HOME}/scripts/entry-point.sh
 COPY scripts/auth/webserver.sh ${MLFLOW_HOME}/scripts/webserver.sh
 COPY scripts/auth/mlflow.sh ${MLFLOW_HOME}/scripts/mlflow.sh
+
+RUN chmod a+x ${MLFLOW_HOME}/scripts/entry-point.sh
+RUN chmod a+x ${MLFLOW_HOME}/scripts/webserver.sh
+RUN chmod a+x ${MLFLOW_HOME}/scripts/mlflow.sh
 
 CMD ["/bin/bash", "./scripts/entry-point.sh"]
 
