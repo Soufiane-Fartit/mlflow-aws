@@ -11,6 +11,9 @@ from sklearn.linear_model import ElasticNet
 import mlflow
 import mlflow.sklearn
 
+import os
+os.environ['MLFLOW_TRACKING_USERNAME'] = 'username'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = 'secret'
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -41,7 +44,7 @@ if __name__ == "__main__":
     l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
 
 
-    mlflow.set_tracking_uri("https://sfartit-mlflow.herokuapp.com")
+    mlflow.set_tracking_uri("https://<APP_NAME>.herokuapp.com")
     mlflow.set_experiment("wine-quality")
     experiment = mlflow.get_experiment_by_name("wine-quality")
 
